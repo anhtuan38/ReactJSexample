@@ -1,61 +1,58 @@
-import logo from "./logo.svg";
-import "./App.css";
-
-import Content from "./Content";
-import { useState, useCallback, useMemo, useRef } from "react";
+import { useState, useMemo, useRef } from "react";
 
 function App() {
-  const inputRef = useRef();
-  const [products, setProducts] = useState([]);
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
-  const handleSummary = () => {
+  const [products, setProducts] = useState([]);
+
+  const nameRef = useRef();
+
+  const handleSubmit = () => {
     setProducts([
       ...products,
       {
         name,
-        price: +price,
+        price: Number(price),
       },
     ]);
     setName("");
     setPrice("");
-    inputRef.current.focus();
+    nameRef.current.focus();
   };
+
   const total = useMemo(() => {
-    const result = products.reduce((result, prod) => {
-      console.log("tính toán lại");
-      return result + prod.price;
+    const result = products.reduce((total, product) => {
+      console.log("tính toán lại ...");
+      return total + product.price;
     }, 0);
     return result;
   }, [products]);
+
   return (
-    <div style={{ margin: 20 }}>
+    <div style={{ padding: "10px 32px" }}>
       <input
-        placeholder="Tên sản phẩm"
+        ref={nameRef}
         value={name}
-        ref={inputRef}
+        placeholder="Enter name..."
         onChange={(e) => setName(e.target.value)}
       />
       <br />
       <input
-        placeholder="Giá sản phẩm"
         value={price}
+        placeholder="Enter price..."
         onChange={(e) => setPrice(e.target.value)}
       />
       <br />
-      <button onClick={handleSummary}>ADD</button>
-      <div>
-        <h2>{`Tổng: ${total}`}</h2>
-      </div>
-      <div>
-        <ul>
-          {products.map((prod, index) => (
-            <li key={index}>
-              {prod.name}-{prod.price}
-            </li>
-          ))}
-        </ul>
-      </div>
+      <button onClick={handleSubmit}>Add</button>
+      <br />
+      Total: {total}
+      <ul>
+        {products.map((product, index) => (
+          <li key={index}>
+            {product.name} - {product.price}
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
