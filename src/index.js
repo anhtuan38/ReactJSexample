@@ -5,13 +5,13 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 
 import "antd/dist/antd.css";
-import { ThemeProvider } from "./ThemeContext";
+import { StoreProvider } from "./store";
 
 ReactDOM.render(
   <React.StrictMode>
-    <ThemeProvider>
+    <StoreProvider>
       <App />
-    </ThemeProvider>
+    </StoreProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );
