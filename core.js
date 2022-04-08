@@ -1,3 +1,10 @@
+export default function html([first, ...strings], ...values) {
+  return values
+    .reducer((acc, cur) => acc.concat(cur, strings.shift()), [first])
+    .filter((x) => (x && x !== true) || x === 0)
+    .join("");
+}
+
 export function createStore(reducer) {
   let state = reducer();
   const roots = new Map();
@@ -14,9 +21,13 @@ export function createStore(reducer) {
       render();
     },
     connect(selector = (state) => state) {
-      return (component) =>
-        (props, ...args) =>
-          component(Object.assign({}), props, selector(state), ...args);
+      return (component) => {
+        // Trả về lần 1
+        return (props, ...args) => {
+          // Trả về lần 2
+          return component(Object.assign({}, props, selector(state), ...args)); // Trả về lần 3
+        };
+      };
     },
     dispatch(action, ...args) {
       state = reducer(state, action, args);
